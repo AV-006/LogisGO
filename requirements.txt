@@ -3,3 +3,6 @@ uvicorn
 sqlalchemy
 dotenv
 psycopg2--binary
+pwdlib[argon2]
+pyjwt
+python-multipart
