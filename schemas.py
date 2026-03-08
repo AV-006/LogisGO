@@ -8,6 +8,14 @@ class UserCreate(BaseModel):
     email: str
     password: str
     role: str
+    location: str
+
+class CreatePart(BaseModel):
+    name: str
+    description:str
+    price:float
+    car_model:str
+    stock: int
 
 class Token(BaseModel):
     access_token:str
