@@ -91,11 +91,23 @@ def get_all_parts(session: Session=Depends(create_session)):
 
 
 #task: try to do search engine optimiztion(even if they type spark plug 'sparkplug' should be displayed)
-@app.get('/parts/{name}')
-def get_specific_part(name:str,session: Session=Depends(create_session)):
+@app.get('/parts/search')
+def get_specific_part_by_name(name:str,session: Session=Depends(create_session)):
     parts=session.query(Part).filter(Part.name==name).all()
     if not parts:
         raise HTTPException(status_code=404, detail="Parts not available")
+    return parts
+
+@app.get('/parts/search')
+def get_specific_part(car_model:str|None=None,name:str|None=None,session: Session=Depends(create_session)):
+    query=session.query(Part)
+    if name:
+        query1=query.filter(Part.name.ilike(f"%{name}%")).all()
+    if car_model:
+        query2=query.filter(Part.car_model.ilike(f"%{car_model}%")).all()
+    
+    parts=query1.extend(query2)
+    
     return parts
 
 @app.put('/parts/{supplier_id}/{part_id}')
