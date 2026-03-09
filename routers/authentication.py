@@ -5,7 +5,7 @@ from database import create_session
 from sqlalchemy.orm import Session
 from hashing import password_hash,DUMMY_HASH
 from auth_token import create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
-from schemas.token import Token
+from schemas.tokendata import Token
 from models.user import User
 from models.supplier import Supplier
 from schemas.createuser import UserCreate
