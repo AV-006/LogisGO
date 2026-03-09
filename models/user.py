@@ -1,8 +1,7 @@
 from sqlalchemy import Column,Integer,String,Text,ForeignKey,Float
-from sqlalchemy.orm import declarative_base,relationship
-     
+from sqlalchemy.orm import relationship
+from .base import Base
 
-Base=declarative_base()
 class User(Base):
     __tablename__="users"
     id=Column(Integer, primary_key=True, index=True)

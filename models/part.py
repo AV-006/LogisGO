@@ -1,8 +1,7 @@
 from sqlalchemy import Column,Integer,String,Text,ForeignKey,Float
-from sqlalchemy.orm import declarative_base,relationship
-     
+from sqlalchemy.orm import relationship
+from .base import Base
 
-Base=declarative_base()
 class Part(Base):
     __tablename__="parts"
     id=Column(Integer, primary_key=True, index=True)

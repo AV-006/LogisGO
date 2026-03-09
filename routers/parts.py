@@ -1,8 +1,9 @@
 from fastapi import APIRouter,Depends,HTTPException
 from sqlalchemy.orm import Session
-from ..models import Part,Supplier
-from ..database import create_session
-from ..schemas import CreatePart
+from models.part import Part
+from models.supplier import Supplier
+from database import create_session
+from schemas.createpart import CreatePart 
 from typing import Optional
 
 router=APIRouter(tags=["Parts"])

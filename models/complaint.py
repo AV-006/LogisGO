@@ -1,8 +1,5 @@
-from sqlalchemy import Column,Integer,String,Text,ForeignKey,Float
-from sqlalchemy.orm import declarative_base,relationship
-     
-
-Base=declarative_base()
+from sqlalchemy import Column,Integer,String,ForeignKey
+from .base import Base
 
 class Complaint(Base):
     __tablename__="complaints"
