@@ -9,9 +9,18 @@ from typing import Optional
 router=APIRouter(tags=["Supplier"])
 #view user profiles(both supplier and customer)
 
-@router.get('/user',response_model=ShowUser)
-def view_user(user_id:int,session: Session =Depends(create_session)):
-    user=session.query(User).filter(User.id==user_id).first()
-    if not user:
-        raise HTTPException(status_code=404,detail="User not found")
-    return user
+# @router.get('/user',response_model=ShowUser)
+# def view_user(user_id:int,session: Session =Depends(create_session)):
+#     user=session.query(User).filter(User.id==user_id).first()
+#     if not user:
+#         raise HTTPException(status_code=404,detail="User not found")
+#     return user
+
+@router.put('/accept')
+def accept_order(order_id:int,session: Session =Depends(create_session)):
+    order=session.query(Order).filter(Order.id==order_id).first()
+    if not order:
+        raise HTTPException(status_code=404,detail="Order not found")
+    setattr(order,"status","Accepted")
+    session.commit()
+    return order
