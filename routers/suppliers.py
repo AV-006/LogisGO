@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models import *
 from schemas import *
 from database import create_session
-from typing import Optional
+from oauth import get_current_user
 
 router=APIRouter(tags=["Supplier"])
 #view user profiles(both supplier and customer)
@@ -17,7 +17,12 @@ router=APIRouter(tags=["Supplier"])
 #     return user
 
 @router.put('/accept')
-def accept_order(order_id:int,session: Session =Depends(create_session)):
+def accept_order(order_id:int,session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
+    if (current_user.role!="supplier"):
+        raise HTTPException(status_code=404,detail="Not authenticated")
+    user=session.query(Supplier).filter(Supplier.user_id==current_user.id).first()
+    if not user:
+        raise HTTPException(status_code=404,detail="Supplier not found")
     order=session.query(Order).filter(Order.id==order_id).first()
     if not order:
         raise HTTPException(status_code=404,detail="Order not found")
