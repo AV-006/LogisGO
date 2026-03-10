@@ -34,3 +34,13 @@ def place_order(user_id:int,order_item:PlaceOrder,session: Session =Depends(crea
     session.commit()
     session.refresh(orderitem)
     return {"message":"order placed"}
+
+@router.post('/complaint')
+def post_complaint(complaint: PostComplaint, session: Session=Depends(create_session)):
+    user_complaint=Complaint(
+        complaint=complaint.complaint
+    )
+    session.add(user_complaint)
+    session.commit()
+    session.refresh(user_complaint)
+    return user_complaint
