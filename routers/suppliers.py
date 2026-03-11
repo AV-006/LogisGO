@@ -29,7 +29,7 @@ def accept_order(order_id:int,session: Session =Depends(create_session),current_
     setattr(order,"status","Accepted")
     session.commit()
     return order
-
+#orders route
 @router.get('/orders')
 def incoming_orders(session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
     if (current_user.role!="supplier"):
