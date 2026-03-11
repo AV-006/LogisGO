@@ -29,3 +29,15 @@ def accept_order(order_id:int,session: Session =Depends(create_session),current_
     setattr(order,"status","Accepted")
     session.commit()
     return order
+
+@router.get('/orders')
+def incoming_orders(session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
+    if (current_user.role!="supplier"):
+        raise HTTPException(status_code=404,detail="Not authenticated")
+    user=session.query(Supplier).filter(Supplier.user_id==current_user.id).first()
+    if not user:
+        raise HTTPException(status_code=404,detail="Supplier not found")
+    orders=session.query(Order).filter(Order.supplier_id==current_user.id).all()
+    if not orders:
+        return {"No orders to be displayed"}
+    return orders

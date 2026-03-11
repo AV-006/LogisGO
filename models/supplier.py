@@ -12,3 +12,4 @@ class Supplier(Base):
     rating=Column(Float, default=0.00)
     location=Column(String, nullable=False)
     user=relationship("User", back_populates="supplier")
+    inc_order=relationship("Order", back_populates="from_supplier")
