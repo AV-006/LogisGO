@@ -5,6 +5,7 @@ from models import *
 from schemas import *
 from database import create_session
 from oauth import get_current_user
+from .valid_transitions import VALID_TRANSITIONS
 
 router=APIRouter(tags=["Supplier"])
 #view user profiles(both supplier and customer)
@@ -26,7 +27,10 @@ def update_order_status(order_id:int,status: UpdateOrderStatus,session: Session 
     order=session.query(Order).filter(Order.id==order_id).first()
     if not order:
         raise HTTPException(status_code=404,detail="Order not found")
-    setattr(order,"status",status)
+    if(status.status not in VALID_TRANSITIONS[order.status]):
+        raise HTTPException(status_code=400,detail="Invalid Transition")
+    
+    setattr(order,"status",status.status)
     session.commit()
     return status
 #orders route
