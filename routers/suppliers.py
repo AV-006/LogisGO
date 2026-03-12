@@ -16,8 +16,8 @@ router=APIRouter(tags=["Supplier"])
 #         raise HTTPException(status_code=404,detail="User not found")
 #     return user
 
-@router.put('/accept')
-def accept_order(order_id:int,session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
+@router.put('/modify_status')
+def update_order_status(order_id:int,status: UpdateOrderStatus,session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
     if (current_user.role!="supplier"):
         raise HTTPException(status_code=404,detail="Not authenticated")
     user=session.query(Supplier).filter(Supplier.user_id==current_user.id).first()
@@ -26,10 +26,11 @@ def accept_order(order_id:int,session: Session =Depends(create_session),current_
     order=session.query(Order).filter(Order.id==order_id).first()
     if not order:
         raise HTTPException(status_code=404,detail="Order not found")
-    setattr(order,"status","Accepted")
+    setattr(order,"status",status)
     session.commit()
-    return order
+    return status
 #orders route
+
 @router.get('/orders')
 def incoming_orders(session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
     if (current_user.role!="supplier"):

@@ -4,3 +4,4 @@ from .showuser import ShowUser
 from .tokendata import Token
 from .createorder import PlaceOrder
 from .createcomplaint import PostComplaint
+from .updateorderstatus import UpdateOrderStatus

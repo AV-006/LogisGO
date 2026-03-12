@@ -1,11 +1,12 @@
-from sqlalchemy import Column,Integer,String,Text,ForeignKey,Float
+from sqlalchemy import Column,Integer,String,Text,ForeignKey,Float, Enum
 from sqlalchemy.orm import relationship
+from .enums import OrderStatus
 from .base import Base
 
 class Order(Base):
     __tablename__="orders"
     id=Column(Integer, primary_key=True, index=True)
-    status=Column(String, default="Pending")
+    status=Column(Enum(OrderStatus), default=OrderStatus.PENDING)
     user_id=Column(Integer, ForeignKey("users.id"))
     supplier_id=Column(Integer, ForeignKey("suppliers.id"))
     user=relationship("User", back_populates="orders")
