@@ -9,7 +9,7 @@ class Supplier(Base):
     name=Column(String, nullable=False)
     description=Column(Text)
     parts=relationship("Part", back_populates="supplier")
-    rating=Column(Float, default=0.00)
+    rating=relationship("Rating", back_populates="supplier")
     location=Column(String, nullable=False)
     user=relationship("User", back_populates="supplier")
     inc_order=relationship("Order", back_populates="from_supplier")

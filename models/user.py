@@ -11,3 +11,4 @@ class User(Base):
     role=Column(String, default="customer")
     orders=relationship("Order", back_populates="user")
     supplier=relationship("Supplier", back_populates="user")
+    rating=relationship("Rating", back_populates="user")
