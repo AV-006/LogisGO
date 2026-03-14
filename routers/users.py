@@ -1,5 +1,6 @@
 #apart from updating or adding new parts, what else the supplier can do:
 from fastapi import APIRouter,Depends,HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models import *
 from schemas import *
@@ -71,3 +72,20 @@ def rate_supplier(rating: CreateRating, supplier_id: int,session: Session=Depend
     session.commit()
     session.refresh(new_rating)
     return {"message":"New rating created"}
+
+@router.get('/ratings')
+def get_supplier_ratings( supplier_id: int,session: Session=Depends(create_session),current_user: User=Depends(get_current_user)):
+    supplier=session.query(Supplier).filter(Supplier.id==supplier_id).first()
+    if not supplier:
+        raise HTTPException(status_code=404,detail="Supplier not found")
+    avg_ratings=session.query(func.avg(Rating.rate)).filter(
+        Rating.supplier_id==supplier_id
+    ).scalar()
+    total_reviews=session.query(Rating).filter(
+        Rating.supplier_id==supplier_id
+    ).count()
+    return {
+        "supplier_id": supplier_id,
+        "average_rating": round(avg_ratings, 2) if avg_ratings else 0,
+        "total_reviews": total_reviews
+    }
