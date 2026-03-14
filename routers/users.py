@@ -18,9 +18,9 @@ def view_user(user_id:int,session: Session =Depends(create_session)):
     return user
 
 @router.post('/order')
-def place_order(user_id:int,order_item:PlaceOrder,session: Session =Depends(create_session)):
+def place_order(order_item:PlaceOrder,session: Session =Depends(create_session),current_user: User=Depends(get_current_user)):
     order=Order(
-        user_id=user_id,
+        user_id=current_user.id,
     )
     session.add(order)
     session.commit()
@@ -37,7 +37,7 @@ def place_order(user_id:int,order_item:PlaceOrder,session: Session =Depends(crea
     return {"message":"order placed"}
 
 @router.post('/complaint')
-def post_complaint(complaint: PostComplaint, session: Session=Depends(create_session)):
+def post_complaint(complaint: PostComplaint, session: Session=Depends(create_session),current_user: User=Depends(get_current_user)):
     user_complaint=Complaint(
         complaint=complaint.complaint
     )
